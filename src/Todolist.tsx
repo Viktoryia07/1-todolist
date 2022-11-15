@@ -1,33 +1,43 @@
-import React from "react";
+import React from 'react';
 
-type TodolistPropsType = {
+type TaskType = {
+    id: number
     title: string
-    task: Array<taskPropsType>
-}
-
-type taskPropsType = {
-    id: number,
-    title: string,
     isDone: boolean
 }
 
-export const Todolist = (props: TodolistPropsType) => {
-    return (
+type PropsType = {
+    title: string
+    tasks: Array<TaskType>
+    removeTask: (taskId: number)=> void
+    filterTasks: (filterKey: string)=> void
+
+}
+
+export function Todolist(props: PropsType) {
+
+    return <div>
+        <h3>{props.title}</h3>
         <div>
-            <h3>{props.title}</h3>
-            <div>
-                <input/>
-                <button>+</button>
-            </div>
-            <ul>
-                <li><input type="checkbox" checked={props.task[0].isDone}/> <span>{props.task[0].title}</span></li>
-                <li><input type="checkbox" checked={props.task[1].isDone}/> <span>{props.task[1].title}</span></li>
-                <li><input type="checkbox" checked={props.task[2].isDone}/> <span>{props.task[2].title}</span></li>
-            </ul>
-            <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
-            </div>
-        </div>);
+            <input/>
+            <button>+</button>
+        </div>
+        <ul>
+            {props.tasks.map(function (el) {
+                return (
+                    <li key={el.id}>
+                        <button onClick={()=>{props.removeTask(el.id)}}>X</button>
+                        <input type="checkbox" checked={el.isDone}/>
+                        <span>{el.title}</span>
+                    </li>
+                )
+            })}
+
+        </ul>
+        <div>
+            <button onClick={()=>props.filterTasks("All")}>All</button>
+            <button onClick={()=>props.filterTasks("Active")}>Active</button>
+            <button onClick={()=>props.filterTasks("Completed")}>Completed</button>
+        </div>
+    </div>
 }
